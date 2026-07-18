@@ -106,12 +106,25 @@ export function App() {
       return;
     }
 
-    setSubmitState("loading");
+    const name = String(form.get("name") ?? "").trim();
+    const contact = String(form.get("contact") ?? "").trim();
+    const sessionType = String(form.get("sessionType") ?? "").trim();
+    const message = String(form.get("message") ?? "").trim();
+    const whatsappMessage = [
+      "Olá, Isadora! Vim pelo seu site e gostaria de falar sobre um ensaio.",
+      "",
+      `Nome: ${name}`,
+      `Contato: ${contact}`,
+      `Tipo de ensaio: ${sessionType}`,
+      "",
+      `Mensagem: ${message}`,
+    ].join("\n");
+    const whatsappUrl = `https://wa.me/556899335040?text=${encodeURIComponent(whatsappMessage)}`;
+
+    window.open(whatsappUrl, "_blank", "noopener,noreferrer");
+    setSubmitState("success");
     setFormError("");
-    window.setTimeout(() => {
-      setSubmitState("success");
-      event.currentTarget.reset();
-    }, 850);
+    event.currentTarget.reset();
   }
 
   return (
@@ -329,8 +342,8 @@ export function App() {
             <p className="section-kicker">Contato</p>
             <h2>Vamos imaginar seu ensaio com calma?</h2>
             <p>
-              Use os canais abaixo ou envie uma mensagem pelo formulário. A integração de envio
-              pode ser conectada depois a um serviço como EmailJS, Formspree ou backend próprio.
+              Use os canais abaixo ou preencha o formulário para abrir uma mensagem pronta no
+              WhatsApp da Isadora.
             </p>
             <div className="contact-links">
               <a href="https://wa.me/556899335040" target="_blank" rel="noreferrer">
@@ -371,10 +384,10 @@ export function App() {
             </label>
             {submitState === "error" && <p className="form-message error">{formError}</p>}
             {submitState === "success" && (
-              <p className="form-message success">Mensagem preparada com sucesso. Conecte o envio real quando quiser.</p>
+              <p className="form-message success">Mensagem preparada. O WhatsApp foi aberto para você enviar.</p>
             )}
-            <button className="button primary" type="submit" disabled={submitState === "loading"}>
-              {submitState === "loading" ? "Preparando..." : "Enviar mensagem"}
+            <button className="button primary" type="submit">
+              Enviar pelo WhatsApp
             </button>
           </form>
         </section>
